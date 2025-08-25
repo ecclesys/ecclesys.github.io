@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecclesys - Modern Church Management Software</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              salmon: {
+                light: "#FFD6D0",
+                DEFAULT: "#FF8A7A",
+                dark: "#E67A6D",
+              },
+              seafoam: {
+                light: "#E0F2F1",
+                DEFAULT: "#80CBC4",
+                dark: "#4DB6AC",
+              },
+              sand: {
+                light: "#F5F5F5",
+                DEFAULT: "#E0E0E0",
+                dark: "#BDBDBD",
+              },
+              "dark-text": "#2D3748",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #fff5f4;
+        color: #2d3748;
+        scroll-behavior: smooth;
+      }
+
+      .text-gradient {
+        background: linear-gradient(135deg, #ff8a7a 0%, #80cbc4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .bg-gradient {
+        background: linear-gradient(135deg, #ff8a7a 0%, #80cbc4 100%);
+      }
+
+      .card-shadow {
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
+      }
+
+      .card-shadow:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .animated-hero-title {
+        animation: fadeInUp 1s ease-out forwards;
+      }
+
+      .animated-hero-subtitle {
+        animation: fadeInUp 1s ease-out 0.3s forwards;
+        opacity: 0;
+      }
+
+      .animated-hero-buttons {
+        animation: fadeInUp 1s ease-out 0.6s forwards;
+        opacity: 0;
+      }
+
+      .animate-float {
+        animation: float 5s ease-in-out infinite;
+      }
+
+      .animate-pulse-slow {
+        animation: pulse 3s ease-in-out infinite;
+      }
+
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+
+      .animate-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .nav-link {
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: #ff8a7a;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .feature-icon {
+        transition: all 0.4s ease;
+      }
+
+      .feature-card:hover .feature-icon {
+        transform: scale(1.1) rotate(5deg);
+        color: #ff8a7a;
+      }
+
+      /* Form styling */
+      .form-input {
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
+        box-shadow: 0 0 0 3px rgba(255, 138, 122, 0.2);
+      }
+
+      /* Custom button styles */
+      .btn-primary {
+        background: linear-gradient(135deg, #ff8a7a 0%, #e67a6d 100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(255, 138, 122, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 14px rgba(255, 138, 122, 0.4);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #80cbc4 0%, #4db6ac 100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(128, 203, 196, 0.3);
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 14px rgba(128, 203, 196, 0.4);
+      }
+
+      .btn-outline {
+        border: 2px solid #ff8a7a;
+        transition: all 0.3s ease;
+      }
+
+      .btn-outline:hover {
+        background-color: #ff8a7a;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 7px 14px rgba(255, 138, 122, 0.3);
+      }
+    </style>
+  </head>
+  <body class="bg-salmon-light text-dark-text">
+    <!-- Navigation Bar -->
+    <header class="bg-white/90 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+      <nav
+        class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between"
+      >
+        <div class="flex items-center">
+          <a href="#" class="flex items-center space-x-2">
+            <div
+              class="w-10 h-10 rounded-full bg-gradient flex items-center justify-center animate-pulse-slow"
+            >
+              <i class="fas fa-church text-white"></i>
+            </div>
+            <span class="text-2xl font-bold text-dark-text">Ecclesys</span>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a
+            href="#features"
+            class="nav-link text-sm font-medium text-gray-600 hover:text-salmon transition"
+            >Features</a
+          >
+          <a
+            href="#pricing"
+            class="nav-link text-sm font-medium text-gray-600 hover:text-salmon transition"
+            >Pricing</a
+          >
+          <a
+            href="#about"
+            class="nav-link text-sm font-medium text-gray-600 hover:text-salmon transition"
+            >About</a
+          >
+          <a
+            href="#contact"
+            class="nav-link text-sm font-medium text-gray-600 hover:text-salmon transition"
+            >Contact</a
+          >
+          <a
+            href="#"
+            class="px-5 py-2.5 btn-primary text-white text-sm font-semibold rounded-full"
+          >
+            Get Started
+          </a>
+        </div>
+        <div class="md:hidden">
+          <button
+            class="text-gray-600 hover:text-salmon focus:outline-none transition-colors"
+          >
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="py-16 md:py-24 lg:py-32 text-center overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative">
+          <!-- Decorative elements -->
+          <div
+            class="absolute -top-10 -left-20 w-40 h-40 rounded-full bg-salmon opacity-20 animate-float"
+          ></div>
+          <div
+            class="absolute -bottom-10 -right-20 w-40 h-40 rounded-full bg-seafoam opacity-30 animate-float"
+            style="animation-delay: 1.5s"
+          ></div>
+
+          <h1
+            class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 animated-hero-title"
+          >
+            Simplify Your Ministry with
+            <span class="text-gradient">Ecclesys</span>
+          </h1>
+          <p
+            class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto animated-hero-subtitle"
+          >
+            A modern church management platform that empowers your staff,
+            engages your community, and helps you focus on what truly matters.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row items-center justify-center gap-4 animated-hero-buttons"
+          >
+            <a
+              href="#contact"
+              class="px-8 py-4 btn-primary text-white text-lg font-semibold rounded-full"
+            >
+              Request a Demo
+            </a>
+            <a
+              href="#features"
+              class="px-8 py-4 btn-outline text-salmon text-lg font-semibold rounded-full"
+            >
+              Learn More
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section id="features" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            class="text-3xl sm:text-4xl font-bold text-center mb-4 text-dark-text animate-on-scroll"
+          >
+            Features Built for Your Mission
+          </h2>
+          <p
+            class="text-gray-600 text-center mb-12 max-w-xl mx-auto animate-on-scroll"
+          >
+            Everything you need to manage your church community effectively
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature Card 1: Member Management -->
+            <div
+              class="bg-sand-light p-8 rounded-2xl card-shadow flex flex-col items-center text-center animate-on-scroll feature-card"
+            >
+              <div
+                class="w-16 h-16 bg-salmon-light rounded-full flex items-center justify-center mb-4"
+              >
+                <i class="fas fa-users feature-icon text-2xl text-salmon"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2">Member Management</h3>
+              <p class="text-gray-600">
+                Keep your congregation connected with a centralized and secure
+                database. Manage profiles, groups, and communication with ease.
+              </p>
+            </div>
+
+            <!-- Feature Card 2: Attendance Tracking -->
+            <div
+              class="bg-sand-light p-8 rounded-2xl card-shadow flex flex-col items-center text-center animate-on-scroll feature-card"
+            >
+              <div
+                class="w-16 h-16 bg-seafoam-light rounded-full flex items-center justify-center mb-4"
+              >
+                <i
+                  class="fas fa-clipboard-check feature-icon text-2xl text-seafoam-dark"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2">Check-in & Attendance</h3>
+              <p class="text-gray-600">
+                Streamline check-in for services and events. Track attendance,
+                manage groups, and generate valuable insights automatically.
+              </p>
+            </div>
+
+            <!-- Feature Card 3: Communication -->
+            <div
+              class="bg-sand-light p-8 rounded-2xl card-shadow flex flex-col items-center text-center animate-on-scroll feature-card"
+            >
+              <div
+                class="w-16 h-16 bg-salmon-light rounded-full flex items-center justify-center mb-4"
+              >
+                <i
+                  class="fas fa-comments feature-icon text-2xl text-salmon"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2">
+                Integrated Communication
+              </h3>
+              <p class="text-gray-600">
+                Effortlessly send personalized emails and text messages to
+                individuals or groups, keeping everyone informed and engaged.
+              </p>
+            </div>
+
+            <!-- Feature Card 4: Financial Management -->
+            <div
+              class="bg-sand-light p-8 rounded-2xl card-shadow flex flex-col items-center text-center animate-on-scroll feature-card"
+            >
+              <div
+                class="w-16 h-16 bg-seafoam-light rounded-full flex items-center justify-center mb-4"
+              >
+                <i
+                  class="fas fa-donate feature-icon text-2xl text-seafoam-dark"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2">Financial Management</h3>
+              <p class="text-gray-600">
+                Track donations, manage pledges, and generate reports. Simplify
+                giving for your members with secure online options.
+              </p>
+            </div>
+
+            <!-- Feature Card 5: Volunteer Scheduling -->
+            <div
+              class="bg-sand-light p-8 rounded-2xl card-shadow flex flex-col items-center text-center animate-on-scroll feature-card"
+            >
+              <div
+                class="w-16 h-16 bg-salmon-light rounded-full flex items-center justify-center mb-4"
+              >
+                <i
+                  class="fas fa-hands-helping feature-icon text-2xl text-salmon"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2">Volunteer Management</h3>
+              <p class="text-gray-600">
+                Coordinate volunteer teams, schedule shifts, and empower your
+                members to serve. Get the right people in the right places.
+              </p>
+            </div>
+
+            <!-- Feature Card 6: Reporting & Insights -->
+            <div
+              class="bg-sand-light p-8 rounded-2xl card-shadow flex flex-col items-center text-center animate-on-scroll feature-card"
+            >
+              <div
+                class="w-16 h-16 bg-seafoam-light rounded-full flex items-center justify-center mb-4"
+              >
+                <i
+                  class="fas fa-chart-line feature-icon text-2xl text-seafoam-dark"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-2">Powerful Reporting</h3>
+              <p class="text-gray-600">
+                Gain valuable insights into attendance, giving, and member
+                engagement with easy-to-read dashboards and custom reports.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Call to Action Section -->
+      <section
+        class="py-16 md:py-24 bg-gradient text-white text-center animate-on-scroll"
+      >
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+          <h2 class="text-3xl sm:text-4xl font-bold mb-6">
+            Ready to Grow Your Ministry?
+          </h2>
+          <p class="text-lg mb-10 opacity-90 max-w-xl mx-auto">
+            Join churches just like yours who are using Ecclesys to build
+            stronger, more engaged communities.
+          </p>
+          <a
+            href="#contact"
+            class="px-8 py-4 bg-white text-salmon text-lg font-semibold rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300 inline-block"
+          >
+            Request Your Free Demo
+          </a>
+        </div>
+      </section>
+
+      <!-- About Us Section -->
+      <section
+        id="about"
+        class="py-16 md:py-24 bg-sand-light animate-on-scroll"
+      >
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+          <div class="flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2 animate-on-scroll">
+              <div class="relative">
+                <div class="rounded-2xl overflow-hidden card-shadow">
+                  <div
+                    class="w-full h-80 bg-gradient flex items-center justify-center"
+                  >
+                    <i class="fas fa-church text-white text-7xl"></i>
+                  </div>
+                </div>
+                <div
+                  class="absolute -bottom-6 -right-6 w-28 h-28 rounded-full bg-salmon-light flex items-center justify-center"
+                >
+                  <i class="fas fa-heart text-salmon text-3xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="md:w-1/2 text-center md:text-left animate-on-scroll">
+              <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-dark-text">
+                About Ecclesys
+              </h2>
+              <p class="text-gray-600 mb-6">
+                Ecclesys was born from a passion for empowering ministries. We
+                believe that technology should be a tool to build community, not
+                a barrier. Our team is dedicated to providing simple, powerful,
+                and affordable software that helps churches thrive.
+              </p>
+              <p class="text-gray-600">
+                We work closely with church leaders and volunteers to ensure our
+                platform meets your unique needs, allowing you to spend more
+                time with your people and less time on administrative tasks.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Form Section -->
+      <section id="contact" class="py-16 md:py-24 bg-white animate-on-scroll">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
+          <h2
+            class="text-3xl sm:text-4xl font-bold text-center mb-4 text-dark-text"
+          >
+            Contact Us
+          </h2>
+          <p class="text-gray-600 text-center mb-12 max-w-xl mx-auto">
+            We'd love to hear from you. Fill out the form below to request a
+            demo or get in touch with our team.
+          </p>
+          <form class="space-y-6 bg-sand-light p-8 rounded-2xl card-shadow">
+            <div>
+              <label
+                for="name"
+                class="block text-sm font-medium text-gray-700 mb-2"
+                >Full Name</label
+              >
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="form-input mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-salmon focus:ring focus:ring-salmon focus:ring-opacity-50 py-3 px-4"
+              />
+            </div>
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-gray-700 mb-2"
+                >Email Address</label
+              >
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="form-input mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-salmon focus:ring focus:ring-salmon focus:ring-opacity-50 py-3 px-4"
+              />
+            </div>
+            <div>
+              <label
+                for="church"
+                class="block text-sm font-medium text-gray-700 mb-2"
+                >Church/Organization Name</label
+              >
+              <input
+                type="text"
+                id="church"
+                name="church"
+                required
+                class="form-input mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-salmon focus:ring focus:ring-salmon focus:ring-opacity-50 py-3 px-4"
+              />
+            </div>
+            <div>
+              <label
+                for="message"
+                class="block text-sm font-medium text-gray-700 mb-2"
+                >Message</label
+              >
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                class="form-input mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-salmon focus:ring focus:ring-salmon focus:ring-opacity-50 py-3 px-4"
+              ></textarea>
+            </div>
+            <div class="text-center pt-4">
+              <button
+                type="submit"
+                class="px-8 py-4 btn-primary text-white text-lg font-semibold rounded-full"
+              >
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-text text-white py-12 animate-on-scroll">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="md:col-span-1">
+            <a href="#" class="flex items-center space-x-2 mb-4">
+              <div
+                class="w-10 h-10 rounded-full bg-gradient flex items-center justify-center"
+              >
+                <i class="fas fa-church text-white"></i>
+              </div>
+              <span class="text-2xl font-bold">Ecclesys</span>
+            </a>
+            <p class="text-gray-400 text-sm">
+              Modern church management software designed to help your ministry
+              thrive.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Product</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Features</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Pricing</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Demo</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Company</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >About</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Careers</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Support</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Help Center</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Contact</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-salmon-light transition"
+                  >Privacy Policy</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+          <p class="text-sm text-gray-400">
+            &copy; 2024 Ecclesys. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript for scroll-based animations -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const observerOptions = {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.1,
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        const animateElements = document.querySelectorAll(".animate-on-scroll");
+        animateElements.forEach((el) => {
+          observer.observe(el);
+        });
+      });
+    </script>
+  </body>
+</html>
